@@ -1,0 +1,29 @@
+<div
+  class="fixed w-[328.9px] z-[1035] h-screen pt-[5rem] overflow-hidden bg-gray-900 opacity-100 xl:block"
+>
+  <p
+    class="font-mono ...   text-3xl font-extrabold text-center text-white  mb-16"
+  >
+    Movie<span class="text-blue-400"> Theater</span>
+  </p>
+  <div *ngFor="let item of menuItem; let i = index" class="mt-2">
+    <div class="w-full p-2">
+      <p-button
+        [label]="item.label"
+        iconPos="left"
+        [icon]="item.icon"
+        styleClass="p-button-raised p-button-text p-button-info text-white  w-full"
+        (onClick)="menuClicked(i)"
+      ></p-button>
+    </div>
+  </div>
+  <div class="p-2 absolute inset-x-0 bottom-0 h-1/6  ...">
+    <p-button
+      [label]="'Logout'"
+      iconPos="left"
+      [icon]="'pi pi-arrow-circle-left'"
+      styleClass="p-button-raised p-button-text p-button-info w-full text-white"
+      (onClick)="logout()"
+    ></p-button>
+  </div>
+</div>

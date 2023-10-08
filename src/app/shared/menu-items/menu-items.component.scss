@@ -1,0 +1,8 @@
+::ng-deep {
+  .p-button:focus {
+    box-shadow: 0 0 0 0px transparent, 0 0 0 0px transparent, 0 1px 2px 0 black;
+  }
+  .p-sidebar .p-sidebar-content{
+    padding: 0;
+  }
+}

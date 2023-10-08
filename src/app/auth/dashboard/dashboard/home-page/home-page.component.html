@@ -1,0 +1,143 @@
+<div class="flex flex-row justify-start mt-[2.5rem] mr-3">
+  <span class="p-fluid p-float-label ml-2 xl:ml-0">
+    <p-autoComplete
+      id="username"
+      [suggestions]="suggestions"
+      [size]="60"
+      field="name"
+      [dropdown]="true"
+      (completeMethod)="autoComplete($event)"
+      [(ngModel)]="value"
+    >
+      <ng-template let-searchMovie pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <img
+            [src]="
+              'https://image.tmdb.org/t/p/original/' + searchMovie.poster_path
+            "
+            style="width: 50px"
+          />
+          <div class="col">
+            <p class="italic text-start text-base text-white">
+              {{ searchMovie.title }}
+            </p>
+            <p class="italic text-start text-sm text-gray-400">
+              {{ searchMovie.release_date }}
+            </p>
+          </div>
+        </div>
+      </ng-template>
+    </p-autoComplete>
+    <label htmlFor="username">Search Movie</label>
+  </span>
+  <!-- <p-button
+    (onClick)="searchMovie()"
+    class="ml-1"
+    label="Search"
+    styleClass="text-white"
+    icon="pi pi-search"
+  ></p-button> -->
+</div>
+<div class="flex flex-row justify-content-start mr-3 mt-10">
+  <div class="w-full">
+    <app-movie-searched-container
+      [randomMovie]="searchedMovie"
+    ></app-movie-searched-container>
+  </div>
+</div>
+<!-- <div class="flex justify-between w-3/4">
+  <div class="card flex justify-content-center">
+    <p-paginator
+      styleClass="bg-gray-950"
+      (onPageChange)="onPageChange($event)"
+      [first]="first"
+      [rows]="rows"
+      [totalRecords]="movies.length"
+    ></p-paginator>
+  </div>
+  <p-dropdown
+    [options]="categories"
+    styleClass="bg-gray-800 "
+    [(ngModel)]="selectedCategory"
+    optionLabel="name"
+    [filter]="true"
+    filterBy="name"
+    [showClear]="true"
+    placeholder="Select a Category"
+  >
+    <ng-template pTemplate="selectedItem">
+      <div class="flex align-items-center gap-1" *ngIf="selectedCategory">
+        <div>{{ selectedCategory.name }}</div>
+      </div>
+    </ng-template>
+    <ng-template let-category pTemplate="item">
+      <div class="flex align-items-center gap-2">
+        <div>{{ category.name }}</div>
+      </div>
+    </ng-template>
+  </p-dropdown>
+</div> -->
+<div
+  class="grid grid-cols-1 place-items-center md:place-content-start md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 mt-12"
+>
+  <p-card
+    *ngFor="let movie of movies"
+    class="2xl:w-[14rem] h-[94%] xl:w-[13.5rem] lg:w-[12.5rem] md:w-[12rem] drop-shadow-xl sm:w-[14rem]"
+    styleClass="h-full hover:bg-gradient-o-r bg-gradient-to-t from-gray-950 to-gray-900"
+    subheader=""
+  >
+    <ng-template class="" pTemplate="header">
+      <div class="relative w-full rounded-lg ...">
+        <div class="h-64">
+          <img
+            alt="Card"
+            class="rounded-lg h-full object-cover"
+            [src]="'https://image.tmdb.org/t/p/original/' + movie.posterPath"
+          />
+        </div>
+        <div class="absolute top-[-0.7rem] left-[-0.5rem] ...">
+          <i
+            [class]="
+              isLiked(movie.id!)
+                ? 'pi pi-heart-fill text-3xl text-red-700'
+                : 'pi pi-heart text-3xl text-red-700'
+            "
+            (click)="likeMovie(movie.id!, movie.title!)"
+          ></i>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <div class="grid grid-rows-2 text-center mt-[-2rem]">
+        <!-- <p
+          class="font-sans text-base  font-bold text-white tracking-wide ..."
+        >
+          {{ movie.title! }}
+        </p> -->
+        <div class="h-1/2">
+          <a
+            href="#"
+            class="text-white font-thin text-base hover:underline tracking-wide ..."
+            >{{ movie.title }}</a
+          >
+
+          <p class="font-sans text-sm font-thin text-white tracking-wide ...">
+            {{ movie.category }}
+          </p>
+        </div>
+        <div class="mt-4">
+          <i
+            class="pi pi-star-fill text-amber-500 text-lg"
+            style="font-size: 1.4rem"
+          ></i>
+          <div
+            class="flex flex-row justify-center text-center ml-[0.40rem] text-sm text-white"
+          >
+            {{ movie.voteAverage | number : "1.2-2" }}
+            <p class="italic text-sm text-gray-400">/10</p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

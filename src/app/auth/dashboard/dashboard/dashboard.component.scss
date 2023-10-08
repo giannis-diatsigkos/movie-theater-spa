@@ -1,0 +1,52 @@
+:host {
+  ::ng-deep {
+    .p-button.p-button-text {
+      color: white;
+    }
+    .p-button.p-button-outlined {
+      color: white;
+    }
+  }
+  .container aside {
+    width: 0;
+    overflow-y: auto;
+    transition: all 0.5s;
+    background-color: yellow;
+  }
+  .container {
+    display: flex;
+    height: calc(100vh - 70px);
+  }
+  .container aside.expanding {
+    width: 200px;
+  }
+  .wrapper {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+  }
+  .nav {
+    width: 328.9px; /* Set the specific width for .nav */
+  }
+
+  .dashboard {
+    grid-column: span 7 / span 7;
+  }
+
+  @media (max-width: 1279.9px) {
+    .dashboard {
+      grid-column: span 8 / span 8; /* Take up all 8 columns on smaller screens */
+    }
+  }
+  ::ng-deep body .ui-button:enabled:focus {
+    outline: 0 none;
+    outline-offset: 0px;
+    box-shadow: none;
+  }
+  ::ng-deep .p-sidebar .p-sidebar-header {
+    padding-right: 1.25rem;
+    margin-top: 1.25rem;
+    padding-top: 0rem;
+    padding-left: 0rem;
+  }
+}

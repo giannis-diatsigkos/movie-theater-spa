@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <div class="nav hidden xl:block">
+    <ng-container
+      id="sidenav-3"
+      class="fixed left-0 top-0 z-[1035] h-screen w-auto overflow-hidden bg-gray-900 opacity-100 xl:block"
+    >
+      <app-shared-menu-items
+        (menuIndex)="menuClicked($event)"
+        (logoutEvent)="logout()"
+      ></app-shared-menu-items>
+    </ng-container>
+  </div>
+  <div class="dashboard pb-10 ...">
+    <p-sidebar
+      styleClass="bg-gray-900"
+      [style]="{width:'328.9px'}"
+      class="xl:hidden z-[1035] h-screen"
+      [(visible)]="sidebarVisible"
+    >
+      <app-shared-menu-items
+        (menuIndex)="menuClicked($event)"
+        (logoutEvent)="logout()"
+      ></app-shared-menu-items>
+    </p-sidebar>
+    <div class="flex xl:ml-[4.7rem]">
+      <p-button
+        icon="pi pi-align-justify"
+        styleClass="p-button-rounded p-button-text"
+        class="flex mt-2 mr-1"
+        [ngClass]="{ 'xl:hidden': sidebarVisible == false }"
+        (onClick)="sidebarBtn()"
+      ></p-button>
+      <!-- <p
+        class="font-mono ... mr-10 mt-[1.1rem] text-xl font-bold text-center text-white"
+      >
+        Welcome {{ this.username }}
+      </p> -->
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

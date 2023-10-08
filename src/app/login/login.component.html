@@ -1,0 +1,112 @@
+<div class="flex mt-20">
+  <div class="m-auto w-11/12 sm:w-2/3 xl:w-2/4 drop-shadow-md">
+    <p-card styleClass="">
+      <p-tabView class="">
+        <div class="scan hidden md:flex">
+          <div class="movie"></div>
+        </div>
+        <p-tabPanel header="Login">
+          <div class="w-full mt-14">
+            <input
+              [size]=""
+              [(ngModel)]="username"
+              pInputText
+              required="true"
+              [class]="
+                username
+                  ? 'w-full ng-valid ng-pristine'
+                  : 'w-full ng-invalid ng-dirty'
+              "
+              placeholder="Username"
+            />
+            <form class="mt-5 w-full" [formGroup]="formGroup">
+              <p-password
+                formControlName="password"
+                [feedback]="false"
+                [style]="{ width: '100%' }"
+                [inputStyle]="{ width: '100%' }"
+                [toggleMask]="true"
+                [class]="
+                  password ? '   ng-valid ng-pristine' : '  ng-invalid ng-dirty'
+                "
+                [placeholder]="'Password'"
+              ></p-password>
+            </form>
+          </div>
+
+          <div class="flex justify-start mt-10 w-full">
+            <button
+              class="w-full"
+              (click)="login()"
+              pButton
+              pRipple
+              [disabled]="!username && !password"
+              label="Login"
+            ></button>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel styleClass="bg-gray-900" header="SignUp">
+          <div class="w-full mt-14">
+            <input
+              [(ngModel)]="username"
+              pInputText
+              required="true"
+              [class]="
+                username
+                  ? ' w-full ng-valid ng-pristine'
+                  : ' w-full ng-invalid ng-dirty'
+              "
+              placeholder="Username"
+              [size]="24"
+            />
+            <form class="mt-5 w-full" [formGroup]="formGroup">
+              <p-password
+                formControlName="password"
+                [toggleMask]="true"
+                [style]="{ width: '100%' }"
+                [inputStyle]="{ width: '100%' }"
+                [mediumRegex]="'^(?=.*[a-z])(?=.*[0-9])(?=.{6,})'"
+                [strongRegex]="'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'"
+                [class]="
+                  password ? 'ng-valid ng-pristine' : 'ng-invalid ng-dirty'
+                "
+                [placeholder]="'Password'"
+              ></p-password>
+            </form>
+            <form class="mt-5 w-full" [formGroup]="formGroup">
+              <p-password
+                formControlName="confirmPassword"
+                [toggleMask]="true"
+                [style]="{ width: '100%' }"
+                [inputStyle]="{ width: '100%' }"
+                [feedback]="false"
+                [class]="
+                  confirmPassword
+                    ? 'ng-valid ng-pristine'
+                    : 'ng-invalid ng-dirty'
+                "
+                [minlength]="4"
+                [placeholder]="'Retype Password'"
+              ></p-password>
+            </form>
+          </div>
+
+          <div class="flex justify-start mt-10 w-full">
+            <button
+              class="w-full"
+              (click)="signUp()"
+              pButton
+              [disabled]="!username && !password"
+              pRipple
+              label="SignUp"
+            ></button>
+          </div>
+        </p-tabPanel>
+      </p-tabView>
+    </p-card>
+  </div>
+</div>
+<div class="sign text-xs md:text-sm flex flex-row place-content-center mt-10">
+  <span class="fast-flicker">D</span>eveloped and designed by
+  <span class="flicker"> G</span>iannis Diatsigkos
+</div>
