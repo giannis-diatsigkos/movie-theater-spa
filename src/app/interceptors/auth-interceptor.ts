@@ -10,14 +10,12 @@ import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Observable, catchError, finalize, retry, throwError } from 'rxjs';
 import { AuthService } from '../services/auth-service';
-import { LoadingService } from '../services/loading.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private messageService: MessageService,
     private authService: AuthService,
-    private loadingService: LoadingService
   ) {}
 
   intercept(
@@ -34,7 +32,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       finalize(() => {
-        this.loadingService.hideLoader();
       }),
       catchError((err: any) => {
         let errorMessage = '';

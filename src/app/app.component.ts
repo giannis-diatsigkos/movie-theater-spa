@@ -1,5 +1,4 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +8,6 @@ import { LoadingService } from './services/loading.service';
 })
 export class AppComponent {
   title = 'moive-theater';
-  constructor(public loader: LoadingService) { }
+  constructor() { }
 
 }

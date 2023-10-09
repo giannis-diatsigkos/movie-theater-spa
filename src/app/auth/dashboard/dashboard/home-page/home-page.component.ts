@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, TreeNode } from 'primeng/api';
 import { debounceTime, timeout } from 'rxjs';
 import { AuthService } from 'src/app/services/auth-service';
-import { LoadingService } from 'src/app/services/loading.service';
 import {
   Category,
   Client,
@@ -51,8 +51,9 @@ export class HomePageComponent implements OnInit {
     private client: Client,
     private authService: AuthService,
     private messageService: MessageService,
-    private loadingService: LoadingService,
-    private movieTmdbService: MovieTmdbService
+    private movieTmdbService: MovieTmdbService,
+    public router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -113,21 +114,15 @@ export class HomePageComponent implements OnInit {
       });
   }
   searchMovie(): void {
-    // if (!this.value) {
-    //   return;
-    // }
-    // this.movieTmdbService.searchMovies(this.value).subscribe((movie) => {
-    //   this.searchedMovie = movie.results[0];
-    //   console.log(movie);
-    //   this.client.getMovie(movie.results[0].id).subscribe(
-    //     (result) => {
-    //       console.log(result);
-    //     },
-    //     (error) => {
-    //       this.hasMovieResult = 'notFound';
-    //     }
-    //   );
-    // });
+    if (!this.value) {
+      return;
+    }
+    this.movieTmdbService.searchMovies(this.value).subscribe((movie) => {
+      this.searchedMovie = movie.results[0];
+    });
+    const title = encodeURIComponent(this.searchedMovie.title);
+
+    this.router.navigate(['/movie', title]);
   }
 
   randomMovie(): void {

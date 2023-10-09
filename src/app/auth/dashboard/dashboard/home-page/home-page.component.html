@@ -1,4 +1,4 @@
-<div class="flex flex-row justify-start mt-[2.5rem] mr-3">
+<div class="flex flex-row justify-start mt-7 mr-3">
   <span class="p-fluid p-float-label ml-2 xl:ml-0">
     <p-autoComplete
       id="username"
@@ -6,6 +6,7 @@
       [size]="60"
       field="name"
       [dropdown]="true"
+      (onSelect)="searchMovie()"
       (completeMethod)="autoComplete($event)"
       [(ngModel)]="value"
     >
@@ -38,7 +39,7 @@
     icon="pi pi-search"
   ></p-button> -->
 </div>
-<div class="flex flex-row justify-content-start mr-3 mt-10">
+<div class="flex flex-row  mr-3 mt-7 ml-3 xl:ml-1">
   <div class="w-full">
     <app-movie-searched-container
       [randomMovie]="searchedMovie"
@@ -78,20 +79,20 @@
   </p-dropdown>
 </div> -->
 <div
-  class="grid grid-cols-1 place-items-center md:place-content-start md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 mt-12"
+  class="grid grid-cols-2 ml-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-6 gap-6 mt-5 xl:ml-1 mr-3"
 >
   <p-card
     *ngFor="let movie of movies"
-    class="2xl:w-[14rem] h-[94%] xl:w-[13.5rem] lg:w-[12.5rem] md:w-[12rem] drop-shadow-xl sm:w-[14rem]"
+    class=""
     styleClass="h-full hover:bg-gradient-o-r bg-gradient-to-t from-gray-950 to-gray-900"
     subheader=""
   >
     <ng-template class="" pTemplate="header">
-      <div class="relative w-full rounded-lg ...">
-        <div class="h-64">
+      <div class="relative rounded-lg ...">
+        <div>
           <img
             alt="Card"
-            class="rounded-lg h-full object-cover"
+            class="rounded-lg object-fit aspect-[2/3]"
             [src]="'https://image.tmdb.org/t/p/original/' + movie.posterPath"
           />
         </div>
@@ -99,8 +100,8 @@
           <i
             [class]="
               isLiked(movie.id!)
-                ? 'pi pi-heart-fill text-3xl text-red-700'
-                : 'pi pi-heart text-3xl text-red-700'
+                ? 'pi pi-heart-fill text-2xl xl:text-3xl text-red-700'
+                : 'pi pi-heart text-2xl xl:text-3xl text-red-700'
             "
             (click)="likeMovie(movie.id!, movie.title!)"
           ></i>
@@ -108,13 +109,13 @@
       </div>
     </ng-template>
     <ng-template pTemplate="body">
-      <div class="grid grid-rows-2 text-center mt-[-2rem]">
+      <div class="text-center">
         <!-- <p
           class="font-sans text-base  font-bold text-white tracking-wide ..."
         >
           {{ movie.title! }}
         </p> -->
-        <div class="h-1/2">
+        <!-- <div class="h-1/2">
           <a
             href="#"
             class="text-white font-thin text-base hover:underline tracking-wide ..."
@@ -124,8 +125,8 @@
           <p class="font-sans text-sm font-thin text-white tracking-wide ...">
             {{ movie.category }}
           </p>
-        </div>
-        <div class="mt-4">
+        </div> -->
+        <div>
           <i
             class="pi pi-star-fill text-amber-500 text-lg"
             style="font-size: 1.4rem"

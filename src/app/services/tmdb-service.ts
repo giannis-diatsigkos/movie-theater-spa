@@ -25,6 +25,13 @@ export class MovieTmdbService {
   }
 
   getBackdropsImages(id: string) {
-    return this.http.get(`${this.baseUrl}movie/${id}/images?api_key=${this.apiKey}`);
+    return this.http.get(
+      `${this.baseUrl}movie/${id}/images?api_key=${this.apiKey}`
+    );
+  }
+  getPersonCast(id: string): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}person/${id}/movie_credits?api_key=${this.apiKey}`
+    );
   }
 }

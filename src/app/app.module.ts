@@ -27,15 +27,22 @@ import { ImageModule } from 'primeng/image';
 import { MenuItemsComponent } from './shared/menu-items/menu-items.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { DropdownModule } from 'primeng/dropdown';
-import { RectComponent } from './skeleton/skeleton-rect.component';
-import { SkeletonDirective } from './skeleton/skeleton.directive';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule } from 'primeng/paginator';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MovieSearchedContainerComponent } from './shared/movie-searched-container/movie-searched-container.component';
+import { MovieDetailsComponent } from './auth/dashboard/dashboard/movie-details/movie-details.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, DashboardComponent, HomePageComponent, MenuItemsComponent,RectComponent,SkeletonDirective, MovieSearchedContainerComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    DashboardComponent,
+    HomePageComponent,
+    MenuItemsComponent,
+    MovieSearchedContainerComponent,
+    MovieDetailsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -61,7 +68,7 @@ import { MovieSearchedContainerComponent } from './shared/movie-searched-contain
     DropdownModule,
     ProgressSpinnerModule,
     PaginatorModule,
-    AutoCompleteModule
+    AutoCompleteModule,
   ],
   providers: [
     {
