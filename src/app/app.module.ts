@@ -32,6 +32,11 @@ import { PaginatorModule } from 'primeng/paginator';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MovieSearchedContainerComponent } from './shared/movie-searched-container/movie-searched-container.component';
 import { MovieDetailsComponent } from './auth/dashboard/dashboard/movie-details/movie-details.component';
+import { RatingModule } from 'primeng/rating';
+import { GalleriaModule } from 'primeng/galleria';
+import { MessagesModule } from 'primeng/messages';
+import { CarouselModule } from 'primeng/carousel';
+import { SafePipe } from './pipes/safe-url-pipe';
 
 @NgModule({
   declarations: [
@@ -42,6 +47,7 @@ import { MovieDetailsComponent } from './auth/dashboard/dashboard/movie-details/
     MenuItemsComponent,
     MovieSearchedContainerComponent,
     MovieDetailsComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +75,10 @@ import { MovieDetailsComponent } from './auth/dashboard/dashboard/movie-details/
     ProgressSpinnerModule,
     PaginatorModule,
     AutoCompleteModule,
+    RatingModule,
+    MessagesModule,
+    GalleriaModule,
+    CarouselModule,
   ],
   providers: [
     {

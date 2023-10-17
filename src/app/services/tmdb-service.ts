@@ -34,4 +34,10 @@ export class MovieTmdbService {
       `${this.baseUrl}person/${id}/movie_credits?api_key=${this.apiKey}`
     );
   }
+
+  getMovieVideos(id: string): Observable<any> {
+    return this.http.get(
+      `${this.baseUrl}movie/${id}/videos?api_key=${this.apiKey}`
+    );
+  }
 }

@@ -1,1 +1,136 @@
-<p>movie-details works!</p>
+<div
+  *ngIf="movieDetails && movieDetails.poster_path"
+  class="flex flex-row justify-start mr-[-0.7rem] w-full"
+>
+  <div
+    class="relative overflow-hidden bg-cover bg-center 0 w-full bg-no-repeat mb-2 xl:h-[550px] p-12 opacity-100"
+    [ngClass]="{ 'bg-gradient': backgroundPosterColors.length === 2 }"
+    [style.--fromColor]="fromColor!"
+    [style.--toColor]="toColor!"
+  >
+    <div class="grid grid-cols-4">
+      <div class="grid rounded-lg ...">
+        <img
+          *ngIf="movieDetails.poster_path"
+          id="imgPoster"
+          alt="Card"
+          crossorigin="anonymous"
+          class="rounded-lg object-contain aspect-[3/3]"
+          [src]="
+            'https://image.tmdb.org/t/p/original' +
+            (movieDetails.poster_path || '')
+          "
+        />
+      </div>
+      <div class="text-white col-span-2 ml-10">
+        <h2 class="text-xl font-semibold xl:text-2xl">
+          {{ movieDetails.title }}
+        </h2>
+        <div class="text-base font-normal italic text-gray-400">
+          {{
+            movieDetails.release_date +
+              " -Thriller,Crime" +
+              " -" +
+              movieDetails.runtime +
+              " minutes"
+          }}
+        </div>
+        <div class="flex flex-row pt-3">
+          <div class="mt-1">
+            <p-rating
+              class="custom-rate"
+              [(ngModel)]="movieDetails.vote_average"
+              [readonly]="true"
+              [cancel]="false"
+              [stars]="10"
+            >
+            </p-rating>
+          </div>
+          <div class="text-white text-lg font-semibold italic ml-3">
+            {{ movieDetails.vote_average }}
+          </div>
+        </div>
+        <h2 class="text-xl text-white font-semibold xl:text-2xl pt-3">
+          Overview
+        </h2>
+        <div class="text-base font-normal italic text-gray-400">
+          {{ movieDetails.overview }}
+        </div>
+        <div class="flex flex-row text-white mt-5">
+          <p-button
+            [label]="'Add to Library'"
+            icon="pi pi-book"
+            styleClass="p-button    text-white"
+          ></p-button>
+          <p-button
+            class="ml-5"
+            label="Play Trailer"
+            icon="pi pi-play"
+            styleClass="p-button-text "
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  [style.--toColor]="toColor!"
+  [style.--fromColor]="fromColor!"
+  class="grid grid-cols-2 ml-1 mt-10"
+>
+  <div>
+    <div
+      class="photoTitle italic underline underline-offset-8 text-4xl font-extrabold xl:text-2xl mb-14"
+    >
+      <p>Gallery</p>
+    </div>
+    <p-galleria
+      [value]="backdrops"
+      [numVisible]="5"
+      [circular]="true"
+      [showItemNavigators]="true"
+      [showThumbnails]="false"
+      [responsiveOptions]="responsiveOptions"
+      [containerStyle]="{ 'max-width': '640px' }"
+    >
+      <ng-template pTemplate="item" let-item>
+        <img
+          [src]="'https://image.tmdb.org/t/p/original/' + item.file_path"
+          style="width: 100%; display: block"
+        />
+      </ng-template>
+    </p-galleria>
+  </div>
+  <div class="mr-2">
+    <div
+      class="videoTitle italic underline underline-offset-8 text-4xl font-extrabold xl:text-2xl"
+    >
+      Trailers
+    </div>
+    <ng-container *ngIf="videos.length">
+      <p-carousel
+        [value]="videos"
+        [numVisible]="1"
+        class="mt-12"
+        [numScroll]="1"
+        orientation="vertical"
+      >
+        <ng-template let-video pTemplate="item">
+          <ng-container p-carousel-item>
+            <iframe
+              [src]="video | safeUrl"
+              class="h-full"
+              width="100%"
+              height="360px"
+              allow="autoplay; encrypted-media"
+              allowfullscreen
+            ></iframe
+          ></ng-container>
+        </ng-template>
+      </p-carousel>
+    </ng-container>
+    <ng-container *ngIf="videos.length == 0">
+      <p-skeleton width="full" height="18rem"></p-skeleton>
+    </ng-container>
+  </div>
+</div>

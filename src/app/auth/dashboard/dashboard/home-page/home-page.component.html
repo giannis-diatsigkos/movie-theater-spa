@@ -6,7 +6,7 @@
       [size]="60"
       field="name"
       [dropdown]="true"
-      (onSelect)="searchMovie()"
+      (onSelect)="searchMovie($event)"
       (completeMethod)="autoComplete($event)"
       [(ngModel)]="value"
     >

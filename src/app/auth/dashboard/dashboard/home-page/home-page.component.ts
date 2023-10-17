@@ -44,7 +44,7 @@ export class HomePageComponent implements OnInit {
   username: string = '';
   movies!: MovieDto[];
   loadingBody: boolean = false;
-  value?: string;
+  value?: any;
   createMovie: CreateMovieDto = {};
 
   constructor(
@@ -113,16 +113,11 @@ export class HomePageComponent implements OnInit {
         }
       });
   }
-  searchMovie(): void {
-    if (!this.value) {
+  searchMovie(selected: any): void {
+    if (!selected) {
       return;
     }
-    this.movieTmdbService.searchMovies(this.value).subscribe((movie) => {
-      this.searchedMovie = movie.results[0];
-    });
-    const title = encodeURIComponent(this.searchedMovie.title);
-
-    this.router.navigate(['/movie', title]);
+    this.router.navigate(['/dashboard/movie', selected.title, selected.id]);
   }
 
   randomMovie(): void {
