@@ -37,6 +37,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { MessagesModule } from 'primeng/messages';
 import { CarouselModule } from 'primeng/carousel';
 import { SafePipe } from './pipes/safe-url-pipe';
+import { ScrollerModule } from 'primeng/scroller';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { SafePipe } from './pipes/safe-url-pipe';
     RatingModule,
     MessagesModule,
     GalleriaModule,
-    CarouselModule,
+    ScrollerModule,
+    CarouselModule
   ],
   providers: [
     {

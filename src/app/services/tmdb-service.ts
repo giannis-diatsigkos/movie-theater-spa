@@ -31,7 +31,7 @@ export class MovieTmdbService {
   }
   getPersonCast(id: string): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}person/${id}/movie_credits?api_key=${this.apiKey}`
+      `${this.baseUrl}movie/${id}/credits?api_key=${this.apiKey}`
     );
   }
 

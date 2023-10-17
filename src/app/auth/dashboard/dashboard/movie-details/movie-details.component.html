@@ -101,7 +101,7 @@
       </ng-template>
     </p-galleria>
   </div>
-  <div class="mr-2">
+  <div class="mr-4">
     <div
       class="videoTitle italic underline underline-offset-8 text-4xl font-extrabold xl:text-2xl"
     >
@@ -132,5 +132,30 @@
     <ng-container *ngIf="videos.length == 0">
       <p-skeleton width="full" height="18rem"></p-skeleton>
     </ng-container>
+  </div>
+</div>
+<div
+  class="italic underline underline-offset-8 text-4xl font-extrabold xl:text-2xl mb-2 ml-2"
+>
+  <p>Cast</p>
+</div>
+<div class="flex overflow-x-auto pl-6 pr-6 ...">
+  <div class="p-10" *ngFor="let castMember of movieCast">
+    <p-card [style]="{ width: '170px' }">
+      <ng-template pTemplate="header">
+        <div class="relative rounded-lg h-full w-full ...">
+          <div>
+            <img
+              *ngIf="castMember.profile_path"
+              alt="Card"
+              class="rounded-lg object-fit aspect-[2/3]"
+              [src]="
+                'https://image.tmdb.org/t/p/original/' + castMember.profile_path
+              "
+            />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
   </div>
 </div>

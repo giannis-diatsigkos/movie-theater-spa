@@ -28,6 +28,7 @@ export class MovieDetailsComponent implements OnInit {
   backgroundPosterColors: string[] = [];
   fromColor: string = '';
   toColor: string = '';
+  movieCast: any[] = [];
   constructor(
     private route: ActivatedRoute,
     private movieTmdbService: MovieTmdbService,
@@ -83,7 +84,15 @@ export class MovieDetailsComponent implements OnInit {
         });
         console.log(this.videos);
       });
+
+    this.movieTmdbService.getPersonCast(this.movieId).subscribe((result) => {
+      if (result) {
+        this.movieCast = result.cast;
+        console.log(this.movieCast);
+      }
+    });
   }
+
   getColorPalette() {
     const img = document.getElementById('imgPoster') as HTMLImageElement;
     if (img) {
