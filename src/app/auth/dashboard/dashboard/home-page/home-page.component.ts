@@ -36,6 +36,10 @@ export class HomePageComponent implements OnInit {
   categories: any[] = [];
   selectedCategory: any | undefined;
   likedMovie: boolean = false;
+  chatResponse: string = '';
+  isSpeaking: boolean = false;
+  conversation: string[] = [];
+  textAreaValue: string = '';
   hasResult: boolean = true;
   suggestions: any[] = [];
   searchedMovie: any;
@@ -71,7 +75,7 @@ export class HomePageComponent implements OnInit {
     this.rows = event.rows;
   }
   initData() {
-    this.client.getMovies().subscribe((movies: any) => {
+    this.client.apiMoviesGetMovies().subscribe((movies: any) => {
       this.movies = movies;
       this.categories = [
         { name: Category.ACTION, code: 'Action' },
@@ -92,7 +96,7 @@ export class HomePageComponent implements OnInit {
 
   likeMovie(movieId: number, movieTitle: string): void {
     this.client
-      .likedMovie(this.username, movieTitle, movieId)
+      .apiMoviesLikedMovie(this.username, movieTitle, movieId)
       .subscribe((likedMovie) => {
         this.likedMovieModel = likedMovie;
         this.initData();
@@ -146,6 +150,30 @@ export class HomePageComponent implements OnInit {
       // });
     });
   }
+
+  chatClicked() {
+    this.client.apiOpenAIUseChatGPT(this.textAreaValue).subscribe((result: any) => {
+      if (result) {
+        this.chatResponse = result.outputResult;
+        this.speak();
+      }
+    });
+  }
+  speak() {
+    const words = this.chatResponse.split(' ');
+    let currentWordIndex = 0;
+
+    const intervalId = setInterval(() => {
+      if (currentWordIndex < words.length) {
+        this.conversation.push(words[currentWordIndex]);
+
+        currentWordIndex++;
+      } else {
+        this.isSpeaking = false;
+        clearInterval(intervalId);
+      }
+    }, 300);
+  }
   addMovie(movie: any) {
     this.createMovie = {
       tmdbId: movie.id,
@@ -160,9 +188,8 @@ export class HomePageComponent implements OnInit {
       voteCount: movie.vote_count,
       posterPath: movie.poster_path,
       releaseDate: movie.release_date,
-      castMembers: [],
     };
-    this.client.addMovie(this.createMovie).subscribe((result) => {
+    this.client.apiMoviesAddMovie(this.createMovie).subscribe((result) => {
       if (result) {
         this.messageService.add({
           severity: 'info',

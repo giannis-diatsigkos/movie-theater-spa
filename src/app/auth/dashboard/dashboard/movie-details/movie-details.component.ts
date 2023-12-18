@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Message } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { MovieTmdbService } from 'src/app/services/tmdb-service';
 import ColorThief from 'colorthief';
+import { Client, CreditsDto, MovieDto } from 'src/app/services/movie-service';
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.component.html',
@@ -25,15 +26,20 @@ export class MovieDetailsComponent implements OnInit {
   videos: any = [];
   responsiveOptions: any[] = [];
   message: Message[] = [];
+  mp3File: string = '';
   backgroundPosterColors: string[] = [];
   fromColor: string = '';
   toColor: string = '';
+  addMovie: MovieDto = {};
+  credits: CreditsDto[] = [];
   movieCast: any[] = [];
   constructor(
     private route: ActivatedRoute,
     private movieTmdbService: MovieTmdbService,
     private sanitizer: DomSanitizer,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private client: Client,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -64,14 +70,24 @@ export class MovieDetailsComponent implements OnInit {
     this.movieTmdbService.getMovie(this.movieId).subscribe((result) => {
       this.movieDetails = result;
       console.log(this.movieDetails);
+      this.client
+      .apiOpenAIUserChatGptAudio(this.movieDetails.overview)
+      .subscribe((result) => {
+        if (result) {
+          const blob = new Blob([result.data], {
+            type: 'audio/mp3',
+          });
+          this.mp3File = URL.createObjectURL(blob);
+        }
+      });
     });
     this.movieTmdbService
       .getBackdropsImages(this.movieId)
       .subscribe((result: any) => {
         if (result) {
           this.backdrops = result.backdrops;
-          this.getColorPalette();
           console.log(this.backdrops);
+          this.getColorPalette();
         }
       });
 
@@ -94,12 +110,18 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   getColorPalette() {
-    const img = document.getElementById('imgPoster') as HTMLImageElement;
-    if (img) {
-      this.loadImage(img.src).then(() => {
-        this.extractColorPalette(img);
-      });
-    }
+    setTimeout(() => {
+      const img = document.getElementById('imgPoster') as HTMLImageElement;
+      if (img) {
+        this.loadImage(img.src)
+          .then(() => {
+            this.extractColorPalette(img);
+          })
+          .catch((error) => {
+            console.error('Image loading failed:', error);
+          });
+      }
+    }, 500);
   }
   loadImage(src: string): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -117,6 +139,8 @@ export class MovieDetailsComponent implements OnInit {
     });
     this.fromColor = this.backgroundPosterColors[0];
     this.toColor = this.backgroundPosterColors[1];
+    console.log('from color' + this.fromColor);
+    console.log('to color' + this.toColor);
   }
 
   public getHexValues(r: number, g: number, b: number) {
@@ -132,5 +156,49 @@ export class MovieDetailsComponent implements OnInit {
       this.backgroundPosterColors.push(hex);
     }
     console.log(this.backgroundPosterColors);
+  }
+
+  addMovieToLibrary() {
+    // this.credits.push(this.movieCast);
+    this.credits = this.movieCast.map((castItem) => {
+      const credit: CreditsDto = {
+        id: castItem.id,
+        adult: castItem.adult,
+        name: castItem.name,
+        originalName: castItem.original_name,
+        popularity: castItem.popularity,
+        character: castItem.character,
+        profilePath: castItem.profile_path || '',
+      };
+
+      return credit;
+    });
+
+    this.addMovie = {
+      tmdbId: this.movieDetails.id,
+      adult: this.movieDetails.adult,
+      backdropPath: this.movieDetails.backdrop_path,
+      originalLanguage: this.movieDetails.original_language,
+      originalTitle: this.movieDetails.original_title,
+      overview: this.movieDetails.overview,
+      title: this.movieDetails.title,
+      popularity: this.movieDetails.popularity,
+      voteAverage: this.movieDetails.vote_average,
+      voteCount: this.movieDetails.vote_count,
+      posterPath: this.movieDetails.poster_path,
+      releaseDate: this.movieDetails.release_date,
+      category: this.movieDetails.genres[1].name,
+      credits: this.credits,
+    };
+
+    this.client.apiMoviesAddMovie(this.addMovie).subscribe((result) => {
+      if (result) {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Info',
+          detail: `${result} movie is added succesfully`,
+        });
+      }
+    });
   }
 }

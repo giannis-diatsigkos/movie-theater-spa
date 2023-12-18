@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.userExists = true;
     this.user!.username! = this.username;
     this.user!.password = this.formGroup.value.password;
-    this.client.login(this.user).subscribe((token: any) => {
+    this.client.apiAuthenticationLogin(this.user).subscribe((token: any) => {
       if (token) {
         this.authService.setToken(token.token);
         const test = this.authService.setDecodedAccessToken(
@@ -61,8 +61,9 @@ export class LoginComponent implements OnInit {
     this.user!.username = this.username!;
     this.user!.password = this.formGroup.value.password!;
     if (this.user!.password === this.formGroup.value.confirmPassword!) {
-      this.client.signup(this.user).subscribe((token) => {
+      this.client.apiAuthenticationSignup(this.user).subscribe((token:any) => {
         if (token) {
+          this.authService.setToken(token.token);
           const test = this.authService.setDecodedAccessToken(
             JSON.stringify(token)
           );

@@ -20,38 +20,48 @@ export interface IClient {
      * @param body (optional)
      * @return Success
      */
-    signup(body: UserDto | undefined): Observable<string>;
+    apiAuthenticationSignup(body: UserDto | undefined): Observable<string>;
     /**
      * @param body (optional)
      * @return Success
      */
-    login(body: UserDto | undefined): Observable<string>;
+    apiAuthenticationLogin(body: UserDto | undefined): Observable<string>;
     /**
      * @return Success
      */
-    getMovies(): Observable<MovieDto[]>;
+    apiMoviesGetMovies(): Observable<MovieDto[]>;
     /**
      * @return Success
      */
-    getMovie(tmdbId: number): Observable<MovieDto>;
-    /**
-     * @param body (optional)
-     * @return Success
-     */
-    addMovie(body: CreateMovieDto | undefined): Observable<string>;
-    /**
-     * @return Success
-     */
-    likedMovie(userName: string, movieTitle: string, movieId: number): Observable<LikedMovieDto>;
+    apiMoviesGetMovie(tmdbId: number): Observable<MovieDto>;
     /**
      * @param body (optional)
      * @return Success
      */
-    moviesPUT(movieId: number, body: UpdateMovieDto | undefined): Observable<string>;
+    apiMoviesAddMovie(body: CreateMovieDto | undefined): Observable<string>;
     /**
      * @return Success
      */
-    moviesDELETE(movieId: number): Observable<string>;
+    apiMoviesLikedMovie(userName: string, movieTitle: string, movieId: number): Observable<LikedMovieDto>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    apiMoviesPut(movieId: number, body: UpdateMovieDto | undefined): Observable<string>;
+    /**
+     * @return Success
+     */
+    apiMoviesDelete(movieId: number): Observable<string>;
+    /**
+     * @param query (optional)
+     * @return Success
+     */
+    apiOpenAIUseChatGPT(query: string | undefined): Observable<string>;
+    /**
+     * @param textSpeech (optional)
+     * @return Success
+     */
+    apiOpenAIUserChatGptAudio(textSpeech: string | undefined): Observable<FileResponse>;
 }
 
 @Injectable({
@@ -64,14 +74,14 @@ export class Client implements IClient {
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl = 'http://localhost:16180';
+        this.baseUrl =  "https://localhost:44326";
     }
 
     /**
      * @param body (optional)
      * @return Success
      */
-    signup(body: UserDto | undefined): Observable<string> {
+    apiAuthenticationSignup(body: UserDto | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/Authentication/signup";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -88,11 +98,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processSignup(response_);
+            return this.processApiAuthenticationSignup(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processSignup(response_ as any);
+                    return this.processApiAuthenticationSignup(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<string>;
                 }
@@ -101,7 +111,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processSignup(response: HttpResponseBase): Observable<string> {
+    protected processApiAuthenticationSignup(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -144,7 +154,7 @@ export class Client implements IClient {
      * @param body (optional)
      * @return Success
      */
-    login(body: UserDto | undefined): Observable<string> {
+    apiAuthenticationLogin(body: UserDto | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/Authentication/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -161,11 +171,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processLogin(response_);
+            return this.processApiAuthenticationLogin(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processLogin(response_ as any);
+                    return this.processApiAuthenticationLogin(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<string>;
                 }
@@ -174,7 +184,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processLogin(response: HttpResponseBase): Observable<string> {
+    protected processApiAuthenticationLogin(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -216,7 +226,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    getMovies(): Observable<MovieDto[]> {
+    apiMoviesGetMovies(): Observable<MovieDto[]> {
         let url_ = this.baseUrl + "/api/Movies/getMovies";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -229,11 +239,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetMovies(response_);
+            return this.processApiMoviesGetMovies(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetMovies(response_ as any);
+                    return this.processApiMoviesGetMovies(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<MovieDto[]>;
                 }
@@ -242,7 +252,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processGetMovies(response: HttpResponseBase): Observable<MovieDto[]> {
+    protected processApiMoviesGetMovies(response: HttpResponseBase): Observable<MovieDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -284,7 +294,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    getMovie(tmdbId: number): Observable<MovieDto> {
+    apiMoviesGetMovie(tmdbId: number): Observable<MovieDto> {
         let url_ = this.baseUrl + "/api/Movies/getMovie/{tmdbId}";
         if (tmdbId === undefined || tmdbId === null)
             throw new Error("The parameter 'tmdbId' must be defined.");
@@ -300,11 +310,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetMovie(response_);
+            return this.processApiMoviesGetMovie(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetMovie(response_ as any);
+                    return this.processApiMoviesGetMovie(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<MovieDto>;
                 }
@@ -313,7 +323,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processGetMovie(response: HttpResponseBase): Observable<MovieDto> {
+    protected processApiMoviesGetMovie(response: HttpResponseBase): Observable<MovieDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -356,7 +366,7 @@ export class Client implements IClient {
      * @param body (optional)
      * @return Success
      */
-    addMovie(body: CreateMovieDto | undefined): Observable<string> {
+    apiMoviesAddMovie(body: CreateMovieDto | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/Movies/addMovie";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -373,11 +383,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processAddMovie(response_);
+            return this.processApiMoviesAddMovie(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processAddMovie(response_ as any);
+                    return this.processApiMoviesAddMovie(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<string>;
                 }
@@ -386,7 +396,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processAddMovie(response: HttpResponseBase): Observable<string> {
+    protected processApiMoviesAddMovie(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -428,7 +438,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    likedMovie(userName: string, movieTitle: string, movieId: number): Observable<LikedMovieDto> {
+    apiMoviesLikedMovie(userName: string, movieTitle: string, movieId: number): Observable<LikedMovieDto> {
         let url_ = this.baseUrl + "/api/Movies/likedMovie/{userName}/{movieTitle}/{movieId}";
         if (userName === undefined || userName === null)
             throw new Error("The parameter 'userName' must be defined.");
@@ -450,11 +460,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processLikedMovie(response_);
+            return this.processApiMoviesLikedMovie(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processLikedMovie(response_ as any);
+                    return this.processApiMoviesLikedMovie(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<LikedMovieDto>;
                 }
@@ -463,7 +473,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processLikedMovie(response: HttpResponseBase): Observable<LikedMovieDto> {
+    protected processApiMoviesLikedMovie(response: HttpResponseBase): Observable<LikedMovieDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -506,7 +516,7 @@ export class Client implements IClient {
      * @param body (optional)
      * @return Success
      */
-    moviesPUT(movieId: number, body: UpdateMovieDto | undefined): Observable<string> {
+    apiMoviesPut(movieId: number, body: UpdateMovieDto | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/Movies/{movieId}";
         if (movieId === undefined || movieId === null)
             throw new Error("The parameter 'movieId' must be defined.");
@@ -526,11 +536,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processMoviesPUT(response_);
+            return this.processApiMoviesPut(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processMoviesPUT(response_ as any);
+                    return this.processApiMoviesPut(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<string>;
                 }
@@ -539,7 +549,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processMoviesPUT(response: HttpResponseBase): Observable<string> {
+    protected processApiMoviesPut(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -585,7 +595,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    moviesDELETE(movieId: number): Observable<string> {
+    apiMoviesDelete(movieId: number): Observable<string> {
         let url_ = this.baseUrl + "/api/Movies/{movieId}";
         if (movieId === undefined || movieId === null)
             throw new Error("The parameter 'movieId' must be defined.");
@@ -601,11 +611,11 @@ export class Client implements IClient {
         };
 
         return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processMoviesDELETE(response_);
+            return this.processApiMoviesDelete(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processMoviesDELETE(response_ as any);
+                    return this.processApiMoviesDelete(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<string>;
                 }
@@ -614,7 +624,7 @@ export class Client implements IClient {
         }));
     }
 
-    protected processMoviesDELETE(response: HttpResponseBase): Observable<string> {
+    protected processApiMoviesDelete(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -656,22 +666,157 @@ export class Client implements IClient {
         }
         return _observableOf(null as any);
     }
-}
 
-export interface CastDto {
-    movieId?: number;
-    movie?: MovieEntity;
-    personId?: number;
-    person?: PersonEntity;
-    role?: string | null;
-}
+    /**
+     * @param query (optional)
+     * @return Success
+     */
+    apiOpenAIUseChatGPT(query: string | undefined): Observable<string> {
+        let url_ = this.baseUrl + "/api/OpenAI/useChatGPT?";
+        if (query === null)
+            throw new Error("The parameter 'query' cannot be null.");
+        else if (query !== undefined)
+            url_ += "query=" + encodeURIComponent("" + query) + "&";
+        url_ = url_.replace(/[?&]$/, "");
 
-export interface CastMemberEntity {
-    movieId?: number;
-    movie?: MovieEntity;
-    personId?: number;
-    person?: PersonEntity;
-    role?: string | null;
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiOpenAIUseChatGPT(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiOpenAIUseChatGPT(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processApiOpenAIUseChatGPT(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return _observableOf(result200);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            result401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return throwException("Unauthorized", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            result404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            result409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return throwException("Conflict", status, _responseText, _headers, result409);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param textSpeech (optional)
+     * @return Success
+     */
+    apiOpenAIUserChatGptAudio(textSpeech: string | undefined): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/OpenAI/userChatGptAudio?";
+        if (textSpeech === null)
+            throw new Error("The parameter 'textSpeech' cannot be null.");
+        else if (textSpeech !== undefined)
+            url_ += "textSpeech=" + encodeURIComponent("" + textSpeech) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processApiOpenAIUserChatGptAudio(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processApiOpenAIUserChatGptAudio(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileResponse>;
+        }));
+    }
+
+    protected processApiOpenAIUserChatGptAudio(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result401: any = null;
+            result401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return throwException("Unauthorized", status, _responseText, _headers, result401);
+            }));
+        } else if (status === 404) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result404: any = null;
+            result404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            }));
+        } else if (status === 409) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result409: any = null;
+            result409 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+            return throwException("Conflict", status, _responseText, _headers, result409);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 export enum Category {
@@ -698,7 +843,17 @@ export interface CreateMovieDto {
     popularity?: number;
     voteCount?: number;
     voteAverage?: number;
-    castMembers?: CastDto[] | null;
+    credits?: CreditsDto[] | null;
+}
+
+export interface CreditsDto {
+    id?: number;
+    adult?: boolean;
+    name?: string | null;
+    originalName?: string | null;
+    popularity?: number;
+    character?: string | null;
+    profilePath?: string | null;
 }
 
 export interface LikedMovieDto {
@@ -730,35 +885,8 @@ export interface MovieDto {
     category?: Category;
     voteCount?: number;
     voteAverage?: number;
-    castMembers?: CastDto[] | null;
+    credits?: CreditsDto[] | null;
     likedByUsers?: LikedMovieEntity[] | null;
-}
-
-export interface MovieEntity {
-    id?: number;
-    tmdbId?: number;
-    title?: string | null;
-    overview?: string | null;
-    posterPath?: string | null;
-    backdropPath?: string | null;
-    originalLanguage?: string | null;
-    originalTitle?: string | null;
-    adult?: boolean;
-    releaseDate?: Date;
-    category?: Category;
-    popularity?: number;
-    voteCount?: number;
-    voteAverage?: number;
-    likedByUsers?: LikedMovieEntity[] | null;
-    castMembers?: CastMemberEntity[] | null;
-}
-
-export interface PersonEntity {
-    id?: number;
-    firstName?: string | null;
-    lastName?: string | null;
-    birthDate?: Date;
-    castMembers?: CastMemberEntity[] | null;
 }
 
 export interface UpdateMovieDto {
@@ -772,6 +900,13 @@ export interface UpdateMovieDto {
 export interface UserDto {
     username?: string | null;
     password?: string | null;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class ApiException extends Error {

@@ -5,18 +5,17 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  private token: string = '';
+  private token: string | null = '';
   private _username!: string;
   constructor(private router: Router) {
-    const storedToken = localStorage.getItem('Token');
-    this.token = JSON.parse(storedToken!);
+    this.token = localStorage.getItem('Token');
     const storedUsername = localStorage.getItem('Username');
     this._username = JSON.parse(storedUsername!);
   }
   logout(): void {
     this.setToken(null);
-    this._username = '';
-    this.router.navigate(['']);
+    localStorage.setItem('Username', JSON.stringify(null));
+    this.router.navigate(['login']);
   }
   setDecodedAccessToken(token: any) {
     var base64Url = token.split('.')[1];
@@ -40,13 +39,13 @@ export class AuthService {
 
   setToken(token: any) {
     this.token = token;
-    localStorage.setItem('Token', JSON.stringify(this.token));
+    localStorage.setItem('Token', this.token!);
   }
   getToken(): string {
-    return this.token;
+    return this.token!;
   }
   isAuthenticated(): boolean {
-    if (this._username) {
+    if (this.token?.length! > 0) {
       return true;
     }
     return false;

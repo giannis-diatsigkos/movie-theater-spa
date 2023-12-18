@@ -38,6 +38,8 @@ import { MessagesModule } from 'primeng/messages';
 import { CarouselModule } from 'primeng/carousel';
 import { SafePipe } from './pipes/safe-url-pipe';
 import { ScrollerModule } from 'primeng/scroller';
+import { DividerModule } from 'primeng/divider';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -80,7 +82,9 @@ import { ScrollerModule } from 'primeng/scroller';
     MessagesModule,
     GalleriaModule,
     ScrollerModule,
-    CarouselModule
+    CarouselModule,
+    DividerModule,
+    InputTextareaModule,
   ],
   providers: [
     {

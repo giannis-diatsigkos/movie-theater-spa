@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth-service';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  username: string = '';
+  token: string = '';
   menuItem: IMenuItem[] = [
     {
       icon: 'pi pi-home',
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
   sidebarVisible: boolean = false;
   constructor(private authService: AuthService) {}
   ngOnInit(): void {
-    this.username = this.authService.getDecodedAccessToken();
+    this.token = this.authService.getToken();
   }
   onClick() {
     this.sidebarVisible = !this.sidebarVisible;

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { IMenuItem } from 'src/app/models/menu-item.model';
 
 @Component({
@@ -9,12 +10,13 @@ import { IMenuItem } from 'src/app/models/menu-item.model';
 export class MenuItemsComponent {
   @Output() menuIndex = new EventEmitter<number>();
   @Output() logoutEvent = new EventEmitter();
+  constructor(private router: Router) {}
   selectedIndex: number = 0;
   menuItem: IMenuItem[] = [
     {
       icon: 'pi pi-home',
       label: 'Home',
-      route: '',
+      route: '/dashboard/homePage',
     },
     {
       icon: 'pi pi-heart',
@@ -29,8 +31,7 @@ export class MenuItemsComponent {
   ];
 
   menuClicked(index: number): void {
-    this.selectedIndex = index;
-    this.menuIndex.emit(index);
+    this.router.navigate([this.menuItem[index].route]);
   }
 
   logout(): void {

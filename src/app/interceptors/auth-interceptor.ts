@@ -15,7 +15,7 @@ import { AuthService } from '../services/auth-service';
 export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private messageService: MessageService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   intercept(
@@ -23,16 +23,15 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const authToken = this.authService.getToken();
-    console.log('authToken:', authToken); // Check the value in the console
-    request = request.clone({
+    console.log(authToken); // Check the value in the console
+    const req = request.clone({
       setHeaders: {
         Authorization: `Bearer ${authToken}`,
       },
     });
 
-    return next.handle(request).pipe(
-      finalize(() => {
-      }),
+    return next.handle(req).pipe(
+      finalize(() => {}),
       catchError((err: any) => {
         let errorMessage = '';
         if (err.error instanceof Blob) {

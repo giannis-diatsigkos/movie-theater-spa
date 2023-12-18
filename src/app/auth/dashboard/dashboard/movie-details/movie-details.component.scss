@@ -21,6 +21,9 @@
   height: 360px !important;
 }
 
+::ng-deep .p-divider .p-divider-content {
+  background-color: transparent;
+}
 ::ng-deep
   .p-carousel
   .p-carousel-indicators

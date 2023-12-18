@@ -13,6 +13,7 @@
       <ng-template let-searchMovie pTemplate="item">
         <div class="flex align-items-center gap-2">
           <img
+          *ngIf="searchMovie.poster_path"
             [src]="
               'https://image.tmdb.org/t/p/original/' + searchMovie.poster_path
             "
@@ -31,53 +32,14 @@
     </p-autoComplete>
     <label htmlFor="username">Search Movie</label>
   </span>
-  <!-- <p-button
-    (onClick)="searchMovie()"
-    class="ml-1"
-    label="Search"
-    styleClass="text-white"
-    icon="pi pi-search"
-  ></p-button> -->
 </div>
-<div class="flex flex-row  mr-3 mt-7 ml-3 xl:ml-1">
+<div class="flex flex-row mr-3 mt-7 ml-3 xl:ml-1">
   <div class="w-full">
     <app-movie-searched-container
       [randomMovie]="searchedMovie"
     ></app-movie-searched-container>
   </div>
 </div>
-<!-- <div class="flex justify-between w-3/4">
-  <div class="card flex justify-content-center">
-    <p-paginator
-      styleClass="bg-gray-950"
-      (onPageChange)="onPageChange($event)"
-      [first]="first"
-      [rows]="rows"
-      [totalRecords]="movies.length"
-    ></p-paginator>
-  </div>
-  <p-dropdown
-    [options]="categories"
-    styleClass="bg-gray-800 "
-    [(ngModel)]="selectedCategory"
-    optionLabel="name"
-    [filter]="true"
-    filterBy="name"
-    [showClear]="true"
-    placeholder="Select a Category"
-  >
-    <ng-template pTemplate="selectedItem">
-      <div class="flex align-items-center gap-1" *ngIf="selectedCategory">
-        <div>{{ selectedCategory.name }}</div>
-      </div>
-    </ng-template>
-    <ng-template let-category pTemplate="item">
-      <div class="flex align-items-center gap-2">
-        <div>{{ category.name }}</div>
-      </div>
-    </ng-template>
-  </p-dropdown>
-</div> -->
 <div
   class="grid grid-cols-2 ml-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-4 2xl:grid-cols-6 gap-6 mt-5 xl:ml-1 mr-3"
 >
@@ -110,22 +72,6 @@
     </ng-template>
     <ng-template pTemplate="body">
       <div class="text-center">
-        <!-- <p
-          class="font-sans text-base  font-bold text-white tracking-wide ..."
-        >
-          {{ movie.title! }}
-        </p> -->
-        <!-- <div class="h-1/2">
-          <a
-            href="#"
-            class="text-white font-thin text-base hover:underline tracking-wide ..."
-            >{{ movie.title }}</a
-          >
-
-          <p class="font-sans text-sm font-thin text-white tracking-wide ...">
-            {{ movie.category }}
-          </p>
-        </div> -->
         <div>
           <i
             class="pi pi-star-fill text-amber-500 text-lg"
@@ -141,4 +87,43 @@
       </div>
     </ng-template>
   </p-card>
+</div>
+<div class="flex justify-center mt-12">
+  <div class="font-bold text-2xl text-center">
+    Not sure What you Want?
+    <p class="italic font-extrabold text-3xl text-blue-400">Ask Movie Ai</p>
+    <!-- <i
+      class="pi pi-comment text-blue-400 text-lg mt-2"
+      style="font-size: 2.5rem"
+    ></i> -->
+  </div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-4 mr-2">
+  <div class="w-full">
+    <textarea
+      class="w-full"
+      rows="7"
+      cols=""
+      pInputTextarea
+      [(ngModel)]="textAreaValue"
+    ></textarea>
+    <button
+      class="w-full mt-[-10rem]"
+      icon="pi pi-send"
+      (click)="chatClicked()"
+      pButton
+      pRipple
+    ></button>
+  </div>
+  <div class="bg-gray-900 mr-2">
+    <div class="flex flex-wrap mr-2">
+      <ng-container *ngFor="let word of conversation">
+        <p
+          class="italic mr-1 text-gray-400 text-sm md:text-base lg:text-lg xl:text-lg"
+        >
+          {{ word }}
+        </p>
+      </ng-container>
+    </div>
+  </div>
 </div>
